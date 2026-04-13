@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hilkiah Mwanza — Curriculum Vitae</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:         #0e0c0a;
+      --surface:    #161410;
+      --border:     #2a2520;
+      --gold:       #c9a84c;
+      --gold-light: #e8c97a;
+      --muted:      #6b6058;
+      --text:       #e8e0d4;
+      --text-dim:   #a09080;
+      --accent:     #8b3a2a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── Noise texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: .6;
+    }
+
+    /* ── Layout ── */
+    .wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 6rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp .9s ease both;
+    }
+
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+    }
+ 
+    /* ── Profile Picture ── */
+    .hero-photo {
+      flex-shrink: 0;
+      width: 150px;
+      height: 150px;
+      position: relative;
+      margin-left: auto;
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      outline: 1px solid var(--gold);
+      outline-offset: 5px;
+    }
+    /* placeholder shown when no photo is set */
+    .hero-photo .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--surface);
+      border: 1px dashed var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .hero-photo .photo-placeholder:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .hero-photo .photo-placeholder svg {
+      width: 28px;
+      height: 28px;
+      opacity: .5;
+    }
+ 
+    .hero-text { flex: 1; }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 2rem;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 300;
+      letter-spacing: -.02em;
+      line-height: 1.05;
+      color: var(--text);
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-niches {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: .7rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .niche-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      padding: .35rem 1rem;
+      background: transparent;
+      white-space: nowrap;
+      width: auto;
+      height: auto;
+      writing-mode: horizontal-tb;
+      transition: background .2s, color .2s;
+    }
+    .niche-badge:hover {
+      background: var(--gold);
+      color: var(--bg);
+    }
+
+    #photo-upload { display: none; }
+ 
+    @media (max-width: 600px) {
+      .hero-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.6rem;
+      }
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(14,12,10,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: .8rem 0;
+      animation: fadeDown .6s ease both .2s;
+    }
+    nav .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      gap: 1.6rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--gold); }
+
+    /* ── Sections ── */
+    section {
+      padding: 4rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp .7s ease both;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .section-number {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      color: var(--gold);
+      letter-spacing: .1em;
+    }
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── Profile ── */
+    .profile-text {
+      font-size: 1.25rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text);
+      max-width: 680px;
+      border-left: 2px solid var(--gold);
+      padding-left: 1.5rem;
+    }
+
+    /* ── Work Experience ── */
+    .job {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .3rem 2rem;
+      padding: 1.6rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .job:first-of-type { border-top: none; }
+    .job-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .job-company {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--gold);
+    }
+    .job-period {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      text-align: right;
+      white-space: nowrap;
+      grid-row: span 2;
+      align-self: center;
+    }
+    .job-desc {
+      grid-column: 1;
+      font-size: .95rem;
+      color: var(--text-dim);
+      margin-top: .4rem;
+      line-height: 1.6;
+    }
+    .job-desc li {
+      margin-left: 1.2rem;
+      margin-bottom: .3rem;
+    }
+
+    /* ── Education ── */
+    .edu-item {
+      padding: 1.4rem 0;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .2rem 2rem;
+    }
+    .edu-item:first-of-type { border-top: none; }
+    .edu-degree {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .edu-school {
+      font-style: italic;
+      color: var(--gold);
+      font-size: .98rem;
+    }
+    .edu-year {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      grid-row: span 2;
+      align-self: center;
+      text-align: right;
+    }
+
+    /* ── Skills ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .skill-group h4 {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .6rem;
+    }
+    .skill-list {
+      list-style: none;
+    }
+    .skill-list li {
+      font-size: .95rem;
+      color: var(--text-dim);
+      padding: .2rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .skill-list li::before {
+      content: '◆';
+      font-size: .4rem;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+     /* ── Certifications ── */
+    .certificate {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .3rem 2rem;
+      padding: 1.6rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .certificate:first-of-type { border-top: none; }
+    .certificate-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .certificate-company {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--gold);
+    }
+    .certificate-company {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      text-align: right;
+      white-space: nowrap;
+      grid-row: span 2;
+      align-self: center;
+    }
+    .certificate {
+      grid-column: 1;
+      font-size: .95rem;
+      color: var(--text-dim);
+      margin-top: .4rem;
+      line-height: 1.6;
+    }
+    .certificate li {
+      margin-left: 1.2rem;
+      margin-bottom: .3rem;
+    }
+
+    /* Leadership Experience */
+    
+    
+    /* ── Interests ── */
+    .interests-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7rem;
+    }
+    .interest-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      border: 1px solid var(--border);
+      padding: .4rem 1rem;
+      color: var(--text-dim);
+      transition: border-color .2s, color .2s;
+    }
+    .interest-tag:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ── Languages ── */
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+    .lang-card {
+      border: 1px solid var(--border);
+      padding: 1rem 1.2rem;
+    }
+    .lang-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .lang-level {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .12em;
+      color: var(--gold);
+      margin-top: .2rem;
+    }
+    .lang-bar {
+      height: 2px;
+      background: var(--border);
+      margin-top: .8rem;
+      position: relative;
+    }
+    .lang-bar-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: var(--gold);
+      transition: width .6s ease;
+    }
+
+    /* Services Offered */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1.4rem;
+    }
+    .services-card {
+      padding: 2rem 1.6rem;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      transition: transform .3s ease, box-shadow .3 ease;
+      cursor: default; 
+    }
+    .service-card:nth-child(1) {background: #1a2a3a; border-top: 3px solid #4a9edd; }
+    .service-card:nth-child(2) {background: #1e2d1e; border-top: 3px solid #4caf6e; }
+    .service-card:nth-child(3) {background: #2d1e2d; border-top: 3px solid #b06ed4; }
+    .service-card:nth-child(4) {background: #2d2414; border-top: 3px solid #e0943a; }
+
+
+    .services-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .3s ease;
+      border-radius: 4px;
+    }
+
+    .service-card:nth-child(1)::after {background: radial-gradient(circle at 50% 0%, rgba(74,158,221,.18), transparent 70%);}
+    .service-card:nth-child(2)::after {background: radial-gradient(circle at 50% 0%, rgba(76,175,110,.18), transparent 70%);}
+    .service-card:nth-child(3)::after {background: radial-gradient(circle at 50% 0%, rgba(176,110,212,.18), transparent 70%);}
+    .service-card:nth-child(4)::after {background: radial-gradient(circle at 50% 0%, rgba(224,148,58,.18), transparent 70%);}
+
+
+    .services-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.5);
+    }
+    .service-card:hover::after { opacity: 1; }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      line-height: 1;
+      display: block;
+    }
+    .service-name {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: .5rem;
+      letter-spacing: .02em;
+    }
+
+    .service-card:nth-child(1)::after .service-name { color: #7fc4f0;}
+    .service-card:nth-child(2)::after .service-name { color: #7dd49a;}
+    .service-card:nth-child(3)::after .service-name { color: #cc99e8;}
+    .service-card:nth-child(1)::after .service-name { color: #f0b87a;}
+
+    .services-desc {
+      font-size: .9rem;
+      color: rgba(220,210,200,.75);
+      line-height: 1.65;
+    }
+    
+
+    /* Contact */
+    .contact-intro {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+    }
+
+    .contact.buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: .75rem 1.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      transition: transform .2s, box-shadow .2s, background .2s border-color .2s, color .2s;
+    }
+
+    .contact-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,4);
+    }
+
+    .contact-btn--email {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .contact-btn--email:hover {
+      background: var(--gold)
+      color: var(--bg);
+    }
+
+    .contact-btn--linkedin {
+      border-color: #0a66c2;
+      color: #4d9fe0;
+    }
+
+    .contact-btn--linkedin:hover {
+      background: #0a66c2;
+      color: #fff;
+    }
+
+    .contact-btn--whatsapp {
+      border-color: #25d366;
+      color: #fff;
+    }
+
+
+    /* ── Footer ── */
+    footer {
+      padding: 3rem 0 0;
+      text-align: center;
+    }
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .14em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* stagger sections */
+    section:nth-child(1) { animation-delay: .1s; }
+    section:nth-child(2) { animation-delay: .2s; }
+    section:nth-child(3) { animation-delay: .3s; }
+    section:nth-child(4) { animation-delay: .4s; }
+    section:nth-child(5) { animation-delay: .5s; }
+    section:nth-child(6) { animation-delay: .6s; }
+    section:nth-child(7) { animation-delay: .7s; }
+    section:nth-child(8) { animation-delay: .8s; }
+    section:nth-child(9) { animation-delay: .9s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .job, .edu-item {
+        grid-template-columns: 1fr;
+      }
+      .job-period, .edu-year {
+        text-align: left;
+        grid-row: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <a href="#profile">Profile</a>
+    <a href="#experience">Experience</a>
+    <a href="#education">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#leadership">Leadership Experience</a>
+    <a href="#interests">Interests</a>
+    <a href="#languages">Languages</a>
+    <a href="#services">Services Offered</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="wrapper">
+  <header class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-photo">
+        <img src="profile images/WhatsApp Image 2026-04-09 at 10.58.18 AM.jpeg" alt="Trouble fetching image: Hilkiah Mwanza pfp">
+        <svg xlmns="https://www/w3/org/2000/svg" fill="none" viewbox="0 0 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        </svg>
+      </div>
+      <input type="file" id="photo-upload" accept="image/*"/>
+    </div>
+
+    <div class="hero-text">
+      <div class="hero-tag">Portfolio</div>
+      <h1>Hilkiah<br/><em>Mwanza</em></h1>
+      <div class="hero-niches">
+        <span class="niche-badge">Physicist</span>
+        <span class="niche-badge">Data Scientist &amp; Analyst</span>
+        <span class="niche-badge">Web Developer</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 01 Professional Profile -->
+  <section id="profile">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <span class="section-title">Professional Profile</span>
+    </div>
+    <p class="profile-text">
+      A dedicated and results-driven professional with a strong commitment to excellence,
+      innovation, and community impact. Adept at navigating complex challenges with
+      analytical precision and collaborative leadership. Passionate about leveraging
+      expertise to drive meaningful growth across organisations and communities within
+      Southern Africa and beyond.
+    </p>
+  </section>
+
+  <!-- 02 Work Experience -->
+  <section id="experience">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <span class="section-title">Work Experience</span>
+    </div>
+
+    <div class="job">
+      <div class="job-title">Freelance Data Analyst &amp; Web Developer</div>
+      <div class="job-period">Aug 2025 — Present</div>
+      <div class="job-company">Freelancer</div>
+      <ul class="job-desc">
+        <li>Developed web pages front-ends.</li>
+        <li>Worked with Excel, Pandas (Python), SPSS and STATA to synthesize and analyze data to identify characteristic trends, glean insight, and optimize decision making.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-title">Physics Tutor</div>
+      <div class="job-period">Jan 2026 — Mar 2026</div>
+      <div class="job-company">Information and Communications University</div>
+      <ul class="job-desc">
+        <li>Tutored freshmen university students in A' level physics, math, and basic electronics.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-title">Tutor</div>
+      <div class="job-period">Aug 2022 — Oct 2024</div>
+      <div class="job-company">Brilliant Minds Tuition Center</div>
+      <ul class="job-desc">
+        <li>Tutored tenth to twelfth grade high school pupils and freshman university students in physics and math.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 Education -->
+  <section id="education">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <span class="section-title">Education</span>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-degree">BSc Physics</div>
+      <div class="edu-year">2026</div>
+      <div class="edu-school">The University of Zambia, Lusaka</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-degree">Grade Twelve Secondary School Certificate</div>
+      <div class="edu-year">2018</div>
+      <div class="edu-school">Kamwala South Seconadary School, Lusaka</div>
+    </div>
+  </section>
+
+  <!-- 04 Skills -->
+  <section id="skills">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <span class="section-title">Skills</span>
+    </div>
+
+    <div class="skills-grid">
+      <!-- ✏️ Edit categories and skill items as needed -->
+      <div class="skill-group">
+        <h4>Technical</h4>
+        <ul class="skill-list">
+          <li>Coding: Python, C++</li>
+          <li>Data Science &amp; Analysis</li>
+          <li>Front-end Web Development</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h4>Management</h4>
+        <ul class="skill-list">
+          <li>Strategic Planning</li>
+          <li>Team Leardership</li>
+          <li>Project Management</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h4>Communication</h4>
+        <ul class="skill-list">
+          <li>Report Writing</li>
+          <li>Public Speaking</li>
+          <li>Stakeholder Engagement</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h4>Software &amp; Tools</h4>
+        <ul class="skill-list">
+          <li>Microsoft Office Suite</li>
+          <li>Linux</li>
+          <li>Power BI</li>
+          <li>SPSS</li>
+          <li>STATA</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!--05 Certifications-->
+  <section id="certifications">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <span class="section-title">Certifications</span>
+    </div>
+
+    <div class="certificate">
+      <div class="certificate-title">Development in Africa with Radio Astronomy Basic Training Program</div>
+      <div class="certificate-period">Mar 2026</div>
+      <div class="certificate-company">Development in Africa with Radio Astronomy (DARA)</div>
+      <ul class="certificate-desc">
+        <li>Linux &amp; Python Training delivered by CHPC, South Africa.</li>
+        <li>Optical Astronomiy Training and data analysis at the Turkana Basin Institute, Kenya, using facvilities from the University of Edinburgh &amp;Technical University of Kenya.</li>
+        <li>Radio Astronomy Training: The use of single-dish radio telescopes, receivers and Very Long Baseline Interferometry techniques  at the Ghana Radio Asthronomy Observatory in Ghana.</li>
+        <li>Reduction &amp; analsysis of Very Long Baseline Interferometry data.</li>
+        <li>Annual Network Meeting: Entrepreneurship, business start-ups, career skills and development training.</li>
+      </ul>
+    </div>
+   
+
+    <div class="certificate">
+      <div class="certificate-title">Introduction to Japanese as a Foreign Language</div>
+      <div class="certificate-period">Aug 2025</div>
+      <div class="certificate-company">The University of Zambia, Dept. of Arts &amp; Literary Studies</div>
+      <ul class="certificate-desc">
+        <li>Basic speech, reading &amp; writing in Hiragana and Katakana.</li>
+      </ul>
+    </div>
+
+
+    <div class="certificate">
+      <div class="certificate-title">Renewable Energy Mentorship Program</div>
+      <div class="certificate-period">May 2025</div>
+      <div class="certificate-company">Zambia Renewable Energy Association (ZARENA)</div>
+      <ul class="certificate-desc">
+        <li>Explored renewable energy resources and innovations with a focus on solar.</li>
+      </ul>
+    </div>
+
+
+  </section>
+
+
+  <!-- 06 Interests -->
+  <section id="interests">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <span class="section-title">Interests</span>
+    </div>
+
+    <div class="interests-wrap">
+      <span class="interest-tag">Research</span>
+      <span class="interest-tag">Technology</span>
+      <span class="interest-tag">Renewable Energy</span>
+      <span class="interest-tag">Stargazing &amp; Astrophotography</span>
+      <span class="interest-tag">Creative Writing</span>
+      <span class="interest-tag">Travel</span>
+    </div>
+  </section>
+
+  <!-- 06 Languages -->
+  <section id="languages">
+    <div class="section-header">
+      <span class="section-number">07</span>
+      <span class="section-title">Languages</span>
+    </div>
+
+    <div class="lang-grid">
+      <div class="lang-card">
+        <div class="lang-name">English</div>
+        <div class="lang-level">Fluent</div>
+        <div class="lang-bar"><div class="lang-bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="lang-card">
+        <div class="lang-name">Nyanja</div>
+        <div class="lang-level">Native</div>
+        <div class="lang-bar"><div class="lang-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="lang-card">
+        <div class="lang-name">Bemba</div>
+        <div class="lang-level">Intermediate</div>
+        <div class="lang-bar"><div class="lang-bar-fill" style="width:50%"></div></div>
+      </div>
+      <div class="lang-card">
+        <div class="lang-name">Japanese</div>
+        <div class="lang-level">Basic</div>
+        <div class="lang-bar"><div class="lang-bar-fill" style="width:30%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="section-header">
+      <span class="section-number">08</span>
+      <span class="section-title">Services</span>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-icon">📊</div>
+      <div class="service-name">Data Science &amp; Analysis</div>
+      <div class="service-desc">
+        Statistical analysis, data visualisation, and insight reporting using Python, Power BI, Excel, and related data science tools.
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🌐</div>
+      <div class="service-name">Web Development</div>
+      <div class="service-desc">
+        Front-end design and development - clean, responsive websites and landing pages built with HTML, CSS, and JavaScript.
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">✏️</div>
+      <div class="service-name">Logo Design</div>
+      <div class="service-desc">
+        Distinctive logo and brand identity design tailored to your organization's personality and goals.
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🎓</div>
+      <div class="service-name">Tutoring</div>
+      <div class="service-desc">
+        Personalised tutoring in freshman &amp; sophomore physics courses and introductory Python programming.
+      </div>
+    </div>
+
+
+  </section>
+
+  <section id="contact">
+    <div class="section-header">
+      <span class="section-number">09</span>
+      <span class="section-title">Contact</span>
+    </div>
+
+    <p class="contact-intro">Feel free to reach out or connect via any of the platforms below.</p>
+    <div class="contact-buttons">
+      <a class="contact-btn contact-btn--email"
+         href="mailto:hilkiah@example.com">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5a2.25 2.25 0 00-2.25 2.25m19.5 0l-9.75 6.75L2.25 6.75"/>
+        </svg>
+        Email Me
+      </a>
+ 
+      <a class="contact-btn contact-btn--linkedin"
+         href="https://linkedin.com/in/your-profile"
+         target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452H17.01v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.588V9h3.299v1.562h.046c.459-.869 1.582-1.785 3.255-1.785 3.484 0 4.128 2.294 4.128 5.278v6.397zM5.337 7.433a1.914 1.914 0 110-3.828 1.914 1.914 0 010 3.828zm1.651 13.019H3.685V9h3.303v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        LinkedIn
+      </a>
+
+      <a class="contact-btn contact-btn--whatsapp"
+         href="https://wa.me/260770866959"
+         target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        WhatsApp
+      </a>
+  </section>
+
+  <footer>
+    <p>Hilkiah Mwanza &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; Curriculum Vitae</p>
+  </footer>
+</div>
+
+</body>
+</html>
